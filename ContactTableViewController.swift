@@ -8,11 +8,12 @@
 
 import UIKit
 
-class ContactTableViewController: UITableViewController {
+class ContactTableViewController: UITableViewController{
 
     // MARK: Properties
     var contacts = [Contact]()
-    let searcController = UISearchController(searchResultsController: nil)
+    var filteredContacts = [Contact]()
+    let searchController = UISearchController(searchResultsController: nil)
     
     
     override func viewDidLoad() {
@@ -34,6 +35,12 @@ class ContactTableViewController: UITableViewController {
         })
         
         // Add Search Controller
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,6 +57,9 @@ class ContactTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        if searchController.active && searchController.searchBar.text != ""{
+            return filteredContacts.count
+        }
         return contacts.count
     }
 
@@ -60,11 +70,14 @@ class ContactTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! ContactTableViewCell
         
-        let contact = contacts[indexPath.row]
-        
+        let contact: Contact
+        if searchController.active && searchController.searchBar.text != "" {
+            contact = filteredContacts[indexPath.row]
+        }else{
+            contact = contacts[indexPath.row]
+        }
         cell.photo.image = contact.photo
-        cell.fullName.text = contact.firstName + " " + contact.secondName
-
+        cell.fullName.text = contact.getFullName()
         return cell
     }
     
@@ -119,7 +132,12 @@ class ContactTableViewController: UITableViewController {
             
             if let selectedContactCell = sender as? ContactTableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedContactCell)!
-                let selectedContact = contacts[indexPath.row]
+                let selectedContact: Contact
+                if searchController.active && searchController.searchBar.text != "" {
+                    selectedContact = filteredContacts[indexPath.row]
+                }else{
+                    selectedContact = contacts[indexPath.row]
+                }
                 contactViewController.contact = selectedContact
             }
             
@@ -133,12 +151,17 @@ class ContactTableViewController: UITableViewController {
         if let sourceViewController = sender.sourceViewController as? ContactViewController, contact = sourceViewController.contact {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update
-                contacts[selectedIndexPath.row] = contact
-                contacts.sortInPlace({
-                    $0.compareFullName($1)
-                })
-                //tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .Bottom)
-                tableView.reloadData()
+                if searchController.active && searchController.searchBar.text != "" {
+                    let indexContact = contacts.indexOf(filteredContacts[selectedIndexPath.row])
+                    contacts[indexContact!] = contact
+                    tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .Bottom)
+                }else{
+                    contacts[selectedIndexPath.row] = contact
+                    contacts.sortInPlace({
+                        $0.compareFullName($1)
+                    })
+                        tableView.reloadData()
+                }
             }
             else{
                 // Add
@@ -166,5 +189,19 @@ class ContactTableViewController: UITableViewController {
     func loadContacts() -> [Contact]?{
         return NSKeyedUnarchiver.unarchiveObjectWithFile(Contact.ArchiveUrl.path!) as? [Contact]
     }
+    
+    // MARK: Search Controller
+    func filterContentForSearchText(searchText: String, scope: String="All"){
+        filteredContacts = contacts.filter({ contact in
+        return contact.getFullName().lowercaseString.containsString(searchText.lowercaseString)})
+        
+        tableView.reloadData()
+    }
 
+}
+
+extension ContactTableViewController: UISearchResultsUpdating{
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
 }

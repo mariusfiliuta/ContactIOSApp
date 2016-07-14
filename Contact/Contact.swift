@@ -14,6 +14,15 @@ enum contactValidatingErrors{
     case wrongEmailFormat
     case valid
 }
+
+
+enum contactGroups: String{
+    case all = "All"
+    case favorites = "Favorites"
+    case family = "Family"
+    case work = "Work"
+}
+
 class Contact: NSObject, NSCoding{
     
     // MARK: Properties
@@ -78,6 +87,10 @@ class Contact: NSObject, NSCoding{
         }
     
         return errors
+    }
+    
+    func getFullName() -> String{
+        return self.firstName + " " + self.secondName
     }
     
     // MARK: NSCoding
