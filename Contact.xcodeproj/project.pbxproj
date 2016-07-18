@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC0979811D3D05CC00F8ECF7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0979801D3D05CC00F8ECF7 /* MapViewController.swift */; };
+		EC0979831D3D096200F8ECF7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC0979821D3D096200F8ECF7 /* MapKit.framework */; };
 		ECFEABA01D3641BA0021AD84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFEAB9F1D3641BA0021AD84 /* AppDelegate.swift */; };
 		ECFEABA21D3641BA0021AD84 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFEABA11D3641BA0021AD84 /* ContactViewController.swift */; };
 		ECFEABA51D3641BA0021AD84 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECFEABA31D3641BA0021AD84 /* Main.storyboard */; };
@@ -29,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EC0979801D3D05CC00F8ECF7 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		EC0979821D3D096200F8ECF7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		ECFEAB9C1D3641BA0021AD84 /* Contact.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Contact.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECFEAB9F1D3641BA0021AD84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECFEABA11D3641BA0021AD84 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC0979831D3D096200F8ECF7 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 		ECFEAB931D3641BA0021AD84 = {
 			isa = PBXGroup;
 			children = (
+				EC0979821D3D096200F8ECF7 /* MapKit.framework */,
 				ECFEAB9E1D3641BA0021AD84 /* Contact */,
 				ECFEABB31D3641BA0021AD84 /* ContactTests */,
 				ECFEAB9D1D3641BA0021AD84 /* Products */,
@@ -88,6 +94,7 @@
 				ECFEABBF1D366A1E0021AD84 /* Contact.swift */,
 				ECFEABC31D36782F0021AD84 /* ContactTableViewCell.swift */,
 				ECFEABC11D36777D0021AD84 /* ContactTableViewController.swift */,
+				EC0979801D3D05CC00F8ECF7 /* MapViewController.swift */,
 				ECFEABA31D3641BA0021AD84 /* Main.storyboard */,
 				ECFEABA61D3641BA0021AD84 /* Assets.xcassets */,
 				ECFEABA81D3641BA0021AD84 /* LaunchScreen.storyboard */,
@@ -155,7 +162,11 @@
 				TargetAttributes = {
 					ECFEAB9B1D3641BA0021AD84 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 3XRPG3H299;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					ECFEABAF1D3641BA0021AD84 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -208,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECFEABC21D36777D0021AD84 /* ContactTableViewController.swift in Sources */,
+				EC0979811D3D05CC00F8ECF7 /* MapViewController.swift in Sources */,
 				ECFEABC41D36782F0021AD84 /* ContactTableViewCell.swift in Sources */,
 				ECFEABA21D3641BA0021AD84 /* ContactViewController.swift in Sources */,
 				ECFEABC01D366A1E0021AD84 /* Contact.swift in Sources */,
@@ -346,7 +358,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Contact/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.my.contact.bigbit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.my.app.Contact;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -360,7 +372,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Contact/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.my.contact.bigbit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.my.app.Contact;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
