@@ -15,7 +15,6 @@ class ContactTableViewController: UITableViewController{
     var filteredContacts = [Contact]()
     let searchController = UISearchController(searchResultsController: nil)
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,8 +38,8 @@ class ContactTableViewController: UITableViewController{
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-        
-        
+        searchController.searchBar.scopeButtonTitles = Contact.contactGroups
+        searchController.searchBar.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,7 +56,7 @@ class ContactTableViewController: UITableViewController{
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if searchController.active && searchController.searchBar.text != ""{
+        if searchController.active /* && searchController.searchBar.text != "" */{
             return filteredContacts.count
         }
         return contacts.count
@@ -71,13 +70,17 @@ class ContactTableViewController: UITableViewController{
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! ContactTableViewCell
         
         let contact: Contact
-        if searchController.active && searchController.searchBar.text != "" {
+        if searchController.active /* && searchController.searchBar.text != "" */{
             contact = filteredContacts[indexPath.row]
         }else{
             contact = contacts[indexPath.row]
         }
         cell.photo.image = contact.photo
         cell.fullName.text = contact.getFullName()
+        //cell.backgroundColor = UIColor.grayColor()
+        //cell.alpha = 0
+        
+        //UIView.animateWithDuration(2, animations: { cell.alpha = 1 })
         return cell
     }
     
@@ -120,8 +123,6 @@ class ContactTableViewController: UITableViewController{
         return true
     }
     */
-
-    
     
     // MARK: - Navigation
 
@@ -133,7 +134,7 @@ class ContactTableViewController: UITableViewController{
             if let selectedContactCell = sender as? ContactTableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedContactCell)!
                 let selectedContact: Contact
-                if searchController.active && searchController.searchBar.text != "" {
+                if searchController.active /* && searchController.searchBar.text != "" */ {
                     selectedContact = filteredContacts[indexPath.row]
                 }else{
                     selectedContact = contacts[indexPath.row]
@@ -151,7 +152,7 @@ class ContactTableViewController: UITableViewController{
         if let sourceViewController = sender.sourceViewController as? ContactViewController, contact = sourceViewController.contact {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update
-                if searchController.active && searchController.searchBar.text != "" {
+                if searchController.active  /* && searchController.searchBar.text != "" */ {
                     let indexContact = contacts.indexOf(filteredContacts[selectedIndexPath.row])
                     contacts[indexContact!] = contact
                     tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .Bottom)
@@ -191,17 +192,29 @@ class ContactTableViewController: UITableViewController{
     }
     
     // MARK: Search Controller
-    func filterContentForSearchText(searchText: String, scope: String="All"){
+    func filterContentForSearchText(searchText: String, scope: String="None"){
         filteredContacts = contacts.filter({ contact in
-        return contact.getFullName().lowercaseString.containsString(searchText.lowercaseString)})
-        
+            let inGroup = (scope == "None") || (contact.group == scope)
+            return  inGroup && ( searchText == "" || contact.getFullName().lowercaseString.containsString(searchText.lowercaseString) )
+        })
         tableView.reloadData()
     }
+    
+    
 
 }
 
 extension ContactTableViewController: UISearchResultsUpdating{
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+        let searchBar = searchController.searchBar
+        let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
+        filterContentForSearchText(searchController.searchBar.text ?? "", scope: scope)
+    }
+}
+
+extension ContactTableViewController: UISearchBarDelegate {
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        
+        filterContentForSearchText(searchBar.text ?? "", scope: searchBar.scopeButtonTitles![selectedScope])
     }
 }

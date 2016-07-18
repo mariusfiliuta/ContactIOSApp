@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ContactViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate{
+class ContactViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPickerViewDataSource,
+    UIPickerViewDelegate{
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,9 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
         secondNameTextField.delegate = self
         numberTextField.delegate = self
         mailTextField.delegate = self
+        categoryPickerView.dataSource = self
+        categoryPickerView.delegate = self
+        
         
         //
         
@@ -28,6 +32,7 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
             secondNameTextField.text = contact.secondName
             numberTextField.text = contact.number
             mailTextField.text = contact.mail
+            categoryPickerView.selectRow(Contact.contactGroups.indexOf(contact.group)!, inComponent: 0, animated: true)
             
         }
         else{
@@ -41,15 +46,17 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
         // Dispose of any resources that can be recreated.
     }
 
-    var contact: Contact?
     
     // MARK: Properties
+    var contact: Contact?
+    var group: String = "None"
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var secondNameTextField: UITextField!
     @IBOutlet weak var numberTextField: UITextField!
     @IBOutlet weak var mailTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var categoryPickerView: UIPickerView!
     
     // MARK: Actions
     @IBAction func cancel(sender: UIBarButtonItem) {
@@ -89,7 +96,7 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     func checkValidContact(){
         // Disable the Save button if the text field is empty
-        let checker = Contact.checkValidContact(firstNameTextField.text, secondName: secondNameTextField.text, number: numberTextField.text, mail: mailTextField.text)
+        let checker = Contact.checkValidContact(firstNameTextField.text, secondName: secondNameTextField.text, number: numberTextField.text, mail: mailTextField.text, group: group)
         
         firstNameTextField.backgroundColor = UIColor.clearColor()
         secondNameTextField.backgroundColor = UIColor.clearColor()
@@ -99,23 +106,23 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
         saveButton.enabled = false
         if checker.contains(.emptyString) {
             if firstNameTextField.text?.isEmpty == true {
-                firstNameTextField.backgroundColor = UIColor.redColor()
+                firstNameTextField.backgroundColor = errorCollor()
             }
             if secondNameTextField.text?.isEmpty == true {
-                secondNameTextField.backgroundColor = UIColor.redColor()
+                secondNameTextField.backgroundColor = errorCollor()
             }
             if numberTextField.text?.isEmpty == true {
-                numberTextField.backgroundColor = UIColor.redColor()
+                numberTextField.backgroundColor = errorCollor()
             }
             if mailTextField.text?.isEmpty == true{
-                mailTextField.backgroundColor = UIColor.redColor()
+                mailTextField.backgroundColor = errorCollor()
             }
         }
         if checker.contains(.wrongEmailFormat) {
-            mailTextField.backgroundColor = UIColor.redColor()
+            mailTextField.backgroundColor = errorCollor()
         }
         if checker.contains(.wrongNumberFormat) {
-            numberTextField.backgroundColor = UIColor.redColor()
+            numberTextField.backgroundColor = errorCollor()
         }
         if checker.isEmpty == true{
             saveButton.enabled = true
@@ -133,11 +140,33 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         dismissViewControllerAnimated(true, completion: nil)
     }
-    func hideKeyboard(){
+    private func hideKeyboard(){
         firstNameTextField.resignFirstResponder()
         secondNameTextField.resignFirstResponder()
         numberTextField.resignFirstResponder()
         mailTextField.resignFirstResponder()
+    }
+    
+    private func errorCollor() -> UIColor{
+        return UIColor(red: 150.0/255.0, green: 80.0/255.0, blue: 80.0/255.0, alpha: 0.3)
+    }
+    
+    //MARK: - Delegates and data sources
+    //MARK: Data Sources
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return Contact.contactGroups.count
+    }
+    
+    //MARK: Delegates
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return Contact.contactGroups[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        group = Contact.contactGroups[row]
     }
     
     // Seque
@@ -148,8 +177,7 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
             let number = numberTextField.text ?? ""
             let mail = mailTextField.text ?? ""
             let photo = photoImageView.image
-            
-            contact = Contact(firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo)
+            contact = Contact(firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo, group: group)
         }
     }
 }

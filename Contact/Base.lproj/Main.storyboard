@@ -71,9 +71,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rgQ-lG-JsN">
-                                <rect key="frame" x="20" y="64" width="560" height="328"/>
+                                <rect key="frame" x="20" y="64" width="560" height="554"/>
                                 <subviews>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultContactImage" translatesAutoresizingMaskIntoConstraints="NO" id="UvZ-dt-csf">
+                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="168" placeholderIntrinsicHeight="168" image="defaultContactImage" translatesAutoresizingMaskIntoConstraints="NO" id="UvZ-dt-csf">
                                         <rect key="frame" x="196" y="0.0" width="168" height="168"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -127,6 +127,9 @@
                                             </textField>
                                         </subviews>
                                     </stackView>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ri6-hK-4zg">
+                                        <rect key="frame" x="120" y="338" width="320" height="216"/>
+                                    </pickerView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="6YQ-sa-QYM" secondAttribute="trailing" constant="40" id="8Dx-mj-0zj"/>
@@ -161,6 +164,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="categoryPickerView" destination="Ri6-hK-4zg" id="lTp-tF-YWL"/>
                         <outlet property="firstNameTextField" destination="BCq-Sr-0WG" id="cBg-ca-rTE"/>
                         <outlet property="mailTextField" destination="1ZN-hB-LsX" id="j2y-eR-ZrS"/>
                         <outlet property="numberTextField" destination="b8y-bu-uGZ" id="OZb-wx-vQo"/>

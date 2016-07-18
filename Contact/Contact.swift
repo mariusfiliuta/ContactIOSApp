@@ -12,25 +12,20 @@ enum contactValidatingErrors{
     case emptyString
     case wrongNumberFormat
     case wrongEmailFormat
+    case invalidGroup
     case valid
 }
 
-
-enum contactGroups: String{
-    case all = "All"
-    case favorites = "Favorites"
-    case family = "Family"
-    case work = "Work"
-}
-
 class Contact: NSObject, NSCoding{
-    
+    // MARK: Categories
+    static let contactGroups = ["None", "Family", "Friends", "Work"]
     // MARK: Properties
     var firstName: String
     var secondName: String
     var number: String
     var mail: String
     var photo: UIImage?
+    var group: String = "None"
     
     // MARK: Archiving Paths
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
@@ -43,19 +38,21 @@ class Contact: NSObject, NSCoding{
         static let number = "number"
         static let mail = "mail"
         static let photo = "image"
+        static let group = "group"
         
     }
-    init?(firstName: String, secondName: String, number: String, mail: String, photo: UIImage?){
+    init?(firstName: String, secondName: String, number: String, mail: String, photo: UIImage?, group: String = "None"){
         self.firstName = firstName
         self.secondName = secondName
         self.number = number
         self.mail = mail
         self.photo = photo
+        self.group = group
         
         super.init()
         
         // Initialization Fails
-        if Contact.checkValidContact(firstName, secondName: secondName, number: number, mail: mail).isEmpty == false {
+        if Contact.checkValidContact(firstName, secondName: secondName, number: number, mail: mail, group: group).isEmpty == false {
             return nil
         }
         
@@ -66,7 +63,7 @@ class Contact: NSObject, NSCoding{
         
         return fullName0 < fullName1
     }
-    static func checkValidContact(firstName: String?, secondName: String?, number: String?, mail: String?) -> [contactValidatingErrors]{
+    static func checkValidContact(firstName: String?, secondName: String?, number: String?, mail: String?, group: String) -> [contactValidatingErrors]{
         var errors = [contactValidatingErrors]()
         if firstName!.isEmpty || secondName!.isEmpty || number!.isEmpty || mail!.isEmpty {
             errors.append(.emptyString)
@@ -85,7 +82,10 @@ class Contact: NSObject, NSCoding{
         if !emailTest.evaluateWithObject(mail) {
              errors.append(.wrongEmailFormat)
         }
-    
+        
+        if !contactGroups.contains(group) {
+            errors.append(.invalidGroup)
+        }
         return errors
     }
     
@@ -100,6 +100,7 @@ class Contact: NSObject, NSCoding{
         aCoder.encodeObject(number, forKey: PropertyKey.number)
         aCoder.encodeObject(mail, forKey: PropertyKey.mail)
         aCoder.encodeObject(photo, forKey: PropertyKey.photo)
+        aCoder.encodeObject(group, forKey: PropertyKey.group)
     }
     required convenience init?(coder aDecoder: NSCoder) {
         let firstName = aDecoder.decodeObjectForKey(PropertyKey.firstName) as! String
@@ -107,7 +108,7 @@ class Contact: NSObject, NSCoding{
         let number = aDecoder.decodeObjectForKey(PropertyKey.number) as! String
         let mail = aDecoder.decodeObjectForKey(PropertyKey.mail) as! String
         let photo = aDecoder.decodeObjectForKey(PropertyKey.photo) as? UIImage
-        
-        self.init( firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo)
+        let group = aDecoder.decodeObjectForKey(PropertyKey.group) as! String
+        self.init( firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo, group: group)
     }
 }
