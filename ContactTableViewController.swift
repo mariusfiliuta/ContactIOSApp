@@ -50,12 +50,12 @@ class ContactTableViewController: UITableViewController{
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        
         if searchController.active /* && searchController.searchBar.text != "" */{
             return filteredContacts.count
         }
@@ -128,7 +128,7 @@ class ContactTableViewController: UITableViewController{
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "ShowDetail" {
+        if segue.identifier == "ShowDetail"{
             let contactViewController = segue.destinationViewController as! ContactViewController
             
             if let selectedContactCell = sender as? ContactTableViewCell {
@@ -142,6 +142,21 @@ class ContactTableViewController: UITableViewController{
                 contactViewController.contact = selectedContact
             }
             
+        }else if segue.identifier == "ShowLocation"{
+            let mapViewController = segue.destinationViewController as! MapViewController
+            if let selectedButton = sender as? UIButton, selectedContactCell = selectedButton.superview!.superview as? ContactTableViewCell{
+                
+                tableView.selectRowAtIndexPath(tableView.indexPathForCell(selectedContactCell), animated: true, scrollPosition: UITableViewScrollPosition.Middle)
+                selectedContactCell.setSelected(true, animated: true)
+                let indexPath = tableView.indexPathForCell(selectedContactCell)!
+                let selectedContact: Contact
+                if searchController.active /* && searchController.searchBar.text != "" */ {
+                    selectedContact = filteredContacts[indexPath.row]
+                }else{
+                    selectedContact = contacts[indexPath.row]
+                }
+                mapViewController.contact = selectedContact
+            }
         }else if segue.identifier == "AddItem"{
             
         }
@@ -149,15 +164,22 @@ class ContactTableViewController: UITableViewController{
     
     
     @IBAction func unwindToContactList(sender: UIStoryboardSegue){
-        if let sourceViewController = sender.sourceViewController as? ContactViewController, contact = sourceViewController.contact {
-            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+        var contact:Contact? = nil
+        if let sourceViewController = sender.sourceViewController as? ContactViewController{
+            contact = sourceViewController.contact
+        }
+        else if let sourceViewController = sender.sourceViewController as? MapViewController{
+            contact = sourceViewController.contact
+        }
+        if contact != nil{
+            if let selectedIndexPath = tableView.indexPathForSelectedRow{
                 // Update
                 if searchController.active  /* && searchController.searchBar.text != "" */ {
                     let indexContact = contacts.indexOf(filteredContacts[selectedIndexPath.row])
-                    contacts[indexContact!] = contact
+                    contacts[indexContact!] = contact!
                     tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .Bottom)
                 }else{
-                    contacts[selectedIndexPath.row] = contact
+                    contacts[selectedIndexPath.row] = contact!
                     contacts.sortInPlace({
                         $0.compareFullName($1)
                     })
@@ -167,7 +189,7 @@ class ContactTableViewController: UITableViewController{
             else{
                 // Add
                 //let newIndexPath = NSIndexPath(forRow: contacts.count, inSection: 0)
-                contacts.append(contact)
+                contacts.append(contact!)
                 contacts.sortInPlace({
                     $0.compareFullName($1)
                 })

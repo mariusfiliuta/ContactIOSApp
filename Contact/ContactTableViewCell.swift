@@ -13,6 +13,7 @@ class ContactTableViewCell: UITableViewCell {
     // MARK: Properties
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var fullName: UILabel!
+    @IBOutlet weak var locationButton: UIButton!
     
     
     override func awakeFromNib() {

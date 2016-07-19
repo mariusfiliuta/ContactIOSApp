@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 enum contactValidatingErrors{
     case emptyString
@@ -26,6 +27,7 @@ class Contact: NSObject, NSCoding{
     var mail: String
     var photo: UIImage?
     var group: String = "None"
+    var location: MKPointAnnotation?
     
     // MARK: Archiving Paths
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
@@ -39,15 +41,18 @@ class Contact: NSObject, NSCoding{
         static let mail = "mail"
         static let photo = "image"
         static let group = "group"
+        static let latitude = "latitude"
+        static let longitude = "longitude"
         
     }
-    init?(firstName: String, secondName: String, number: String, mail: String, photo: UIImage?, group: String = "None"){
+    init?(firstName: String, secondName: String, number: String, mail: String, photo: UIImage?, group: String = "None", location: MKPointAnnotation?){
         self.firstName = firstName
         self.secondName = secondName
         self.number = number
         self.mail = mail
         self.photo = photo
         self.group = group
+        self.location = location
         
         super.init()
         
@@ -68,9 +73,7 @@ class Contact: NSObject, NSCoding{
         if firstName!.isEmpty || secondName!.isEmpty || number!.isEmpty || mail!.isEmpty {
             errors.append(.emptyString)
         }
-    
-        //let numberRegEx = "[0-9]"
-        //let numberTest = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
+        
         let numb = Int(number!)
         if numb == nil{
              errors.append(.wrongNumberFormat)
@@ -101,6 +104,8 @@ class Contact: NSObject, NSCoding{
         aCoder.encodeObject(mail, forKey: PropertyKey.mail)
         aCoder.encodeObject(photo, forKey: PropertyKey.photo)
         aCoder.encodeObject(group, forKey: PropertyKey.group)
+        aCoder.encodeObject(location?.coordinate.latitude, forKey: PropertyKey.latitude)
+        aCoder.encodeObject(location?.coordinate.longitude, forKey: PropertyKey.longitude)
     }
     required convenience init?(coder aDecoder: NSCoder) {
         let firstName = aDecoder.decodeObjectForKey(PropertyKey.firstName) as! String
@@ -109,6 +114,14 @@ class Contact: NSObject, NSCoding{
         let mail = aDecoder.decodeObjectForKey(PropertyKey.mail) as! String
         let photo = aDecoder.decodeObjectForKey(PropertyKey.photo) as? UIImage
         let group = aDecoder.decodeObjectForKey(PropertyKey.group) as! String
-        self.init( firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo, group: group)
+        let latitude = aDecoder.decodeObjectForKey(PropertyKey.latitude) as? CLLocationDegrees
+        let longitude = aDecoder.decodeObjectForKey(PropertyKey.longitude) as? CLLocationDegrees
+        var location:MKPointAnnotation? = nil
+        if latitude != nil && longitude != nil {
+            location = MKPointAnnotation()
+            location!.coordinate.latitude = latitude!
+            location!.coordinate.longitude = longitude!
+        }
+        self.init( firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo, group: group, location: location)
     }
 }

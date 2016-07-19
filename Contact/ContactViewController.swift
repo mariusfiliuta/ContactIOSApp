@@ -177,7 +177,7 @@ class ContactViewController: UIViewController, UIImagePickerControllerDelegate, 
             let number = numberTextField.text ?? ""
             let mail = mailTextField.text ?? ""
             let photo = photoImageView.image
-            contact = Contact(firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo, group: group)
+            contact = Contact(firstName: firstName, secondName: secondName, number: number, mail: mail, photo: photo, group: group, location: contact?.location)
         }
     }
 }

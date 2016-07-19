@@ -27,15 +27,31 @@
                                             <rect key="frame" x="8" y="5" width="50" height="50"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Full Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FGU-7k-6nw">
-                                            <rect key="frame" x="81" y="19" width="511" height="21"/>
+                                            <rect key="frame" x="81" y="19" width="457" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="25" placeholderIntrinsicHeight="25" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Skn-fN-Vba">
+                                            <rect key="frame" x="546" y="8" width="46" height="43"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="Skn-fN-Vba" secondAttribute="height" multiplier="46:43" id="a1w-23-9bf"/>
+                                            </constraints>
+                                            <state key="normal" title="Button" image="gpsButton"/>
+                                            <connections>
+                                                <segue destination="ZhM-ae-dIJ" kind="show" identifier="ShowLocation" id="oK5-cf-9vK"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Skn-fN-Vba" firstAttribute="top" secondItem="0id-FI-9Wt" secondAttribute="topMargin" id="6eb-mt-zkh"/>
+                                        <constraint firstItem="Skn-fN-Vba" firstAttribute="bottom" secondItem="0id-FI-9Wt" secondAttribute="bottomMargin" id="ND1-3i-SSK"/>
+                                        <constraint firstItem="Skn-fN-Vba" firstAttribute="trailing" secondItem="0id-FI-9Wt" secondAttribute="trailingMargin" id="YnH-pO-hpN"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="fullName" destination="FGU-7k-6nw" id="3jA-XL-0gL"/>
+                                    <outlet property="locationButton" destination="Skn-fN-Vba" id="2fQ-bJ-DOM"/>
                                     <outlet property="photo" destination="tK0-Hg-zY4" id="9he-jV-2fF"/>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="ShowDetail" id="jFq-gi-m83"/>
                                 </connections>
@@ -181,12 +197,11 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2076" y="484"/>
+            <point key="canvasLocation" x="2888" y="484"/>
         </scene>
-        <!--Map View Controller-->
+        <!--Contact Location-->
         <scene sceneID="mUb-gt-Kam">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UgM-XM-TS9" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="ZhM-ae-dIJ" customClass="MapViewController" customModule="Contact" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="t3q-LT-jyN"/>
@@ -198,6 +213,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mif-Bi-J8X">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="nSh-jc-0o5" appends="YES" id="9Z1-8B-sb7"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -208,12 +227,32 @@
                             <constraint firstItem="mif-Bi-J8X" firstAttribute="leading" secondItem="xki-U0-sLy" secondAttribute="leading" id="xSZ-91-p2C"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Contact Location" id="5Uf-Bu-kJz">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="BYW-hU-foo">
+                            <connections>
+                                <action selector="cancel:" destination="ZhM-ae-dIJ" id="uPt-D5-Awt"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Cb4-MK-Ref">
+                            <connections>
+                                <segue destination="bR0-HM-3QW" kind="unwind" unwindAction="unwindToContactList:" id="oZ5-Jh-O6x"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="mif-Bi-J8X" id="lGC-Ou-Nnc"/>
+                        <outlet property="saveButton" destination="Cb4-MK-Ref" id="K1Z-nk-R9u"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UgM-XM-TS9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="bR0-HM-3QW" userLabel="Exit" sceneMemberID="exit"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="nSh-jc-0o5">
+                    <connections>
+                        <action selector="longTapOnMapView:" destination="ZhM-ae-dIJ" id="4eb-zx-tlw"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2946" y="484"/>
+            <point key="canvasLocation" x="1562" y="80"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Dik-bh-29y">
@@ -251,11 +290,31 @@
             </objects>
             <point key="canvasLocation" x="1360" y="942"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="lh6-oO-xgi">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mEl-5y-E0b" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bpa-Yd-9XJ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ZhM-ae-dIJ" kind="relationship" relationship="rootViewController" id="22Q-gP-vAt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="30Z-T4-zk8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="870" y="-301"/>
+        </scene>
     </scenes>
     <resources>
         <image name="defaultContactImage" width="168" height="168"/>
+        <image name="gpsButton" width="256" height="205"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="oK5-cf-9vK"/>
         <segue reference="jFq-gi-m83"/>
     </inferredMetricsTieBreakers>
 </document>
