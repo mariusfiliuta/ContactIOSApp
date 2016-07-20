@@ -197,7 +197,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2888" y="484"/>
+            <point key="canvasLocation" x="2820" y="490"/>
         </scene>
         <!--Contact Location-->
         <scene sceneID="mUb-gt-Kam">
@@ -288,7 +288,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tBp-Py-gnM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1360" y="942"/>
+            <point key="canvasLocation" x="1732" y="994"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lh6-oO-xgi">
@@ -314,7 +314,7 @@
         <image name="gpsButton" width="256" height="205"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="fbG-QW-Hd9"/>
         <segue reference="oK5-cf-9vK"/>
-        <segue reference="jFq-gi-m83"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -140,6 +140,7 @@ class ContactTableViewController: UITableViewController{
                     selectedContact = contacts[indexPath.row]
                 }
                 contactViewController.contact = selectedContact
+                
             }
             
         }else if segue.identifier == "ShowLocation"{
@@ -156,6 +157,9 @@ class ContactTableViewController: UITableViewController{
                     selectedContact = contacts[indexPath.row]
                 }
                 mapViewController.contact = selectedContact
+                if selectedContact.location != nil {
+                    mapViewController.contactAnnotation = selectedContact.location
+                }
             }
         }else if segue.identifier == "AddItem"{
             
