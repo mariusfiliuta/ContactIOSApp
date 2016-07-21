@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +43,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             locationManager.startUpdatingLocation()
             locationManager.startUpdatingHeading()
         }
+        
+        // Save button can't be pushed if nothing changed
         saveButton.enabled = false
+        
+        // Search Controller
+        searchBar.delegate = self
+
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -51,9 +57,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     // MARK: Properties
+    // Outlets
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
+    // Contact
     var contact: Contact!
+    // Location Info
     var locationManager:CLLocationManager!
     var userAnnotation:MKPointAnnotation?
     var contactAnnotation:MKPointAnnotation?
@@ -61,6 +71,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var userLocation: MKPlacemark!
     var contactLocation: MKPlacemark!
     
+    var annotation:MKAnnotation!
+    var localSearchRequest:MKLocalSearchRequest!
+    var localSearch:MKLocalSearch!
+    var localSearchResponse:MKLocalSearchResponse!
+    var error:NSError!
+    var pointAnnotation:MKPointAnnotation!
+    var pinAnnotationView:MKPinAnnotationView!
     
     // MARK: Actions
     @IBAction func cancel(sender: UIBarButtonItem) {
@@ -79,15 +96,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let location = sender.locationInView(mapView)
         let coordinates = mapView.convertPoint(location, toCoordinateFromView: mapView)
         
-        if contactAnnotation == nil{
-            contactAnnotation = MKPointAnnotation()
-            contactAnnotation!.coordinate = coordinates
-            contactAnnotation!.title = "Contact Location"
-            mapView.addAnnotation(contactAnnotation!)
-            
-        }else{
-            contactAnnotation!.coordinate = coordinates
-        }
+        updateContactLocation(coordinates)
+        
         
         if sender.state == UIGestureRecognizerState.Ended{
             if userContactRoute != nil{
@@ -98,6 +108,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
+    
+    func updateContactLocation(coordinates: CLLocationCoordinate2D){
+        if contactAnnotation == nil{
+            contactAnnotation = MKPointAnnotation()
+            contactAnnotation!.coordinate = coordinates
+            contactAnnotation!.title = "Contact Location"
+            mapView.addAnnotation(contactAnnotation!)
+            
+        }else{
+            contactAnnotation!.coordinate = coordinates
+        }
+    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -161,6 +183,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
 
     }
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        // Nothings happen
+    }
     // MARK: Route
     func getDirections() {
         
@@ -182,11 +207,43 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             if error == nil {
                 self.userContactRoute = response!.routes[0] as MKRoute
                 self.mapView.addOverlay(self.userContactRoute.polyline)
+                self.mapView.setVisibleMapRect(self.userContactRoute.polyline.boundingMapRect, edgePadding: UIEdgeInsets(top: 50.0,left: 50.0,bottom: 50.0,right: 50.0), animated: true)
             }
             
         })
     }
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    
+    
+    // Search Controller & Search Bar Delegate
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        //1
+        searchBar.resignFirstResponder()
+        dismissViewControllerAnimated(true, completion: nil)
         
+        //2
+        localSearchRequest = MKLocalSearchRequest()
+        localSearchRequest.naturalLanguageQuery = searchBar.text
+        localSearch = MKLocalSearch(request: localSearchRequest)
+        localSearch.startWithCompletionHandler { (localSearchResponse, error) -> Void in
+            
+            if localSearchResponse == nil{
+                let alertController = UIAlertController(title: nil, message: "Place Not Found", preferredStyle: UIAlertControllerStyle.Alert)
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alertController, animated: true, completion: nil)
+                return
+            }
+            //3
+            let coordinates = CLLocationCoordinate2D(latitude: localSearchResponse!.boundingRegion.center.latitude, longitude:     localSearchResponse!.boundingRegion.center.longitude)
+            
+            self.updateContactLocation(coordinates)
+            if self.userContactRoute != nil{
+                self.mapView.removeOverlay(self.userContactRoute.polyline)
+            }
+            self.getDirections()
+            self.saveButton.enabled = true
+        
+        }
     }
+    
+
 }

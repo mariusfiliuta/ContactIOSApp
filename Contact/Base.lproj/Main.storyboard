@@ -218,12 +218,18 @@
                                     <outletCollection property="gestureRecognizers" destination="nSh-jc-0o5" appends="YES" id="9Z1-8B-sb7"/>
                                 </connections>
                             </mapView>
+                            <searchBar contentMode="redraw" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1PJ-jc-Ksc">
+                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="mif-Bi-J8X" firstAttribute="top" secondItem="xki-U0-sLy" secondAttribute="top" id="4ed-ei-AoV"/>
                             <constraint firstItem="mif-Bi-J8X" firstAttribute="bottom" secondItem="Ax3-Yd-LuV" secondAttribute="top" id="8nH-Y9-HGB"/>
                             <constraint firstAttribute="trailing" secondItem="mif-Bi-J8X" secondAttribute="trailing" id="Byq-TL-mMd"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="1PJ-jc-Ksc" secondAttribute="trailing" constant="-20" id="S03-By-Wea"/>
+                            <constraint firstItem="1PJ-jc-Ksc" firstAttribute="leading" secondItem="xki-U0-sLy" secondAttribute="leadingMargin" constant="-20" id="noH-06-Jdi"/>
                             <constraint firstItem="mif-Bi-J8X" firstAttribute="leading" secondItem="xki-U0-sLy" secondAttribute="leading" id="xSZ-91-p2C"/>
                         </constraints>
                     </view>
@@ -242,6 +248,7 @@
                     <connections>
                         <outlet property="mapView" destination="mif-Bi-J8X" id="lGC-Ou-Nnc"/>
                         <outlet property="saveButton" destination="Cb4-MK-Ref" id="K1Z-nk-R9u"/>
+                        <outlet property="searchBar" destination="1PJ-jc-Ksc" id="Ts5-3w-F3X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UgM-XM-TS9" userLabel="First Responder" sceneMemberID="firstResponder"/>
