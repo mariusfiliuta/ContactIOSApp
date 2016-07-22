@@ -99,7 +99,7 @@ class Contact: NSObject, NSCoding{
     // MARK: NSCoding
     func encodeWithCoder(aCoder: NSCoder) {
         // MARK: Token
-        let clientId =  GIDSignIn.sharedInstance().currentUser.authentication.clientID
+        let clientId =  GIDSignIn.sharedInstance().currentUser?.authentication.clientID ?? ""
         aCoder.encodeObject(firstName, forKey: PropertyKey.firstName + clientId)
         aCoder.encodeObject(secondName, forKey: PropertyKey.secondName + clientId)
         aCoder.encodeObject(number, forKey: PropertyKey.number + clientId)
@@ -111,7 +111,7 @@ class Contact: NSObject, NSCoding{
     }
     required convenience init?(coder aDecoder: NSCoder) {
         // MARK: Token
-        let clientId =  GIDSignIn.sharedInstance().currentUser.authentication.clientID
+        let clientId =  GIDSignIn.sharedInstance().currentUser?.authentication.clientID ?? ""
         let firstName = aDecoder.decodeObjectForKey(PropertyKey.firstName + clientId) as! String
         let secondName = aDecoder.decodeObjectForKey(PropertyKey.secondName + clientId) as! String
         let number = aDecoder.decodeObjectForKey(PropertyKey.number + clientId) as! String
