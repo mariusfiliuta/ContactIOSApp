@@ -216,11 +216,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // Search Controller & Search Bar Delegate
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        //1
         searchBar.resignFirstResponder()
         dismissViewControllerAnimated(true, completion: nil)
         
-        //2
         localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
         localSearch = MKLocalSearch(request: localSearchRequest)
@@ -232,8 +230,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.presentViewController(alertController, animated: true, completion: nil)
                 return
             }
-            //3
-            let coordinates = CLLocationCoordinate2D(latitude: localSearchResponse!.boundingRegion.center.latitude, longitude:     localSearchResponse!.boundingRegion.center.longitude)
+            let coordinates = CLLocationCoordinate2D(latitude: localSearchResponse!.boundingRegion.center.latitude, longitude: localSearchResponse!.boundingRegion.center.longitude)
             
             self.updateContactLocation(coordinates)
             if self.userContactRoute != nil{

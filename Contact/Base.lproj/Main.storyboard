@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="17N-CF-jVB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="I65-jp-WHE">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -10,7 +10,7 @@
         <!--Contacts-->
         <scene sceneID="cju-0m-i0l">
             <objects>
-                <tableViewController id="hIF-Sv-fO3" customClass="ContactTableViewController" customModule="Contact" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ContactTableViewController" id="hIF-Sv-fO3" customClass="ContactTableViewController" customModule="Contact" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" id="BL4-y9-IOP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -279,6 +279,46 @@
             </objects>
             <point key="canvasLocation" x="-598" y="490"/>
         </scene>
+        <!--Sign In View Controller-->
+        <scene sceneID="0Lm-SK-zn7">
+            <objects>
+                <viewController id="I65-jp-WHE" customClass="SignInViewController" customModule="Contact" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jHj-ba-mYq"/>
+                        <viewControllerLayoutGuide type="bottom" id="v01-uB-mEU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="HZR-nF-FG3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="250" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="lfU-8Z-m33" customClass="GIDSignInButton">
+                                <rect key="frame" x="20" y="270" width="560" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="100" placeholderIntrinsicHeight="50" text="Login with Google Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3P1-aI-AAj">
+                                <rect key="frame" x="120" y="95" width="100" height="50"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="3P1-aI-AAj" firstAttribute="top" secondItem="jHj-ba-mYq" secondAttribute="bottom" constant="75" id="MzA-62-XTs"/>
+                            <constraint firstItem="lfU-8Z-m33" firstAttribute="leading" secondItem="HZR-nF-FG3" secondAttribute="leadingMargin" id="gFd-X1-ddE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lfU-8Z-m33" secondAttribute="trailing" id="jks-6v-6t6"/>
+                            <constraint firstItem="3P1-aI-AAj" firstAttribute="leading" secondItem="HZR-nF-FG3" secondAttribute="leadingMargin" constant="100" id="pBn-4M-Nnx"/>
+                            <constraint firstItem="lfU-8Z-m33" firstAttribute="top" secondItem="jHj-ba-mYq" secondAttribute="bottom" constant="250" id="wrz-6L-4xQ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="singInButton" destination="lfU-8Z-m33" id="E2O-JA-Ccw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1LK-ut-Jen" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1326" y="490"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="VtP-ZM-9mc">
             <objects>
@@ -321,7 +361,7 @@
         <image name="gpsButton" width="256" height="205"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fbG-QW-Hd9"/>
+        <segue reference="jFq-gi-m83"/>
         <segue reference="oK5-cf-9vK"/>
     </inferredMetricsTieBreakers>
 </document>
