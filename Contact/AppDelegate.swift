@@ -12,8 +12,6 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate{
 
     var window: UIWindow?
-
-
     /*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         return true
@@ -61,8 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate{
                 withError error: NSError!) {
         if (error == nil) {
             // Properties of the google account
+            ContactTableViewController.userId = user.userID                  // For client-side use only!
             /*
-            let userId = user.userID                  // For client-side use only!
             let idToken = user.authentication.idToken // Safe to send to the server
             let fullName = user.profile.name
             let givenName = user.profile.givenName

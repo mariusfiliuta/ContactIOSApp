@@ -14,6 +14,7 @@ class ContactTableViewController: UITableViewController{
     var contacts = [Contact]()
     var filteredContacts = [Contact]()
     let searchController = UISearchController(searchResultsController: nil)
+    static var userId = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -207,13 +208,22 @@ class ContactTableViewController: UITableViewController{
  
     // MARK: NSCoding
     func saveContacts(){
-        let isSuccesfulSave = NSKeyedArchiver.archiveRootObject(contacts, toFile: Contact.ArchiveUrl.path!)
-        
+        //let clientId =  GIDSignIn.sharedInstance().currentUser?.userID ?? ""
+        let isSuccesfulSave:Bool
+        if ContactTableViewController.userId != ""{
+            isSuccesfulSave = NSKeyedArchiver.archiveRootObject(contacts, toFile: Contact.ArchiveUrl.URLByAppendingPathExtension(ContactTableViewController.userId).path!)
+        }else{
+            isSuccesfulSave = NSKeyedArchiver.archiveRootObject(contacts, toFile: Contact.ArchiveUrl.path!)
+        }
         if !isSuccesfulSave {
             print("Fail to save contacts")
         }
     }
     func loadContacts() -> [Contact]?{
+        //let clientId =  GIDSignIn.sharedInstance().currentUser?.userID ?? ""
+        if ContactTableViewController.userId != ""{
+            return NSKeyedUnarchiver.unarchiveObjectWithFile(Contact.ArchiveUrl.URLByAppendingPathExtension(ContactTableViewController.userId).path!) as? [Contact]
+        }
         return NSKeyedUnarchiver.unarchiveObjectWithFile(Contact.ArchiveUrl.path!) as? [Contact]
     }
     

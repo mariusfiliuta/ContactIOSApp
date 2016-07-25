@@ -99,27 +99,27 @@ class Contact: NSObject, NSCoding{
     // MARK: NSCoding
     func encodeWithCoder(aCoder: NSCoder) {
         // MARK: Token
-        let clientId =  GIDSignIn.sharedInstance().currentUser?.authentication.clientID ?? ""
-        aCoder.encodeObject(firstName, forKey: PropertyKey.firstName + clientId)
-        aCoder.encodeObject(secondName, forKey: PropertyKey.secondName + clientId)
-        aCoder.encodeObject(number, forKey: PropertyKey.number + clientId)
-        aCoder.encodeObject(mail, forKey: PropertyKey.mail + clientId)
-        aCoder.encodeObject(photo, forKey: PropertyKey.photo + clientId)
-        aCoder.encodeObject(group, forKey: PropertyKey.group + clientId)
-        aCoder.encodeObject(location?.coordinate.latitude, forKey: PropertyKey.latitude + clientId)
-        aCoder.encodeObject(location?.coordinate.longitude, forKey: PropertyKey.longitude + clientId)
+        //let clientId =  GIDSignIn.sharedInstance().currentUser?.authentication.clientID ?? ""
+        aCoder.encodeObject(firstName, forKey: PropertyKey.firstName )
+        aCoder.encodeObject(secondName, forKey: PropertyKey.secondName )
+        aCoder.encodeObject(number, forKey: PropertyKey.number )
+        aCoder.encodeObject(mail, forKey: PropertyKey.mail )
+        aCoder.encodeObject(photo, forKey: PropertyKey.photo )
+        aCoder.encodeObject(group, forKey: PropertyKey.group )
+        aCoder.encodeObject(location?.coordinate.latitude, forKey: PropertyKey.latitude )
+        aCoder.encodeObject(location?.coordinate.longitude, forKey: PropertyKey.longitude )
     }
     required convenience init?(coder aDecoder: NSCoder) {
         // MARK: Token
-        let clientId =  GIDSignIn.sharedInstance().currentUser?.authentication.clientID ?? ""
-        let firstName = aDecoder.decodeObjectForKey(PropertyKey.firstName + clientId) as! String
-        let secondName = aDecoder.decodeObjectForKey(PropertyKey.secondName + clientId) as! String
-        let number = aDecoder.decodeObjectForKey(PropertyKey.number + clientId) as! String
-        let mail = aDecoder.decodeObjectForKey(PropertyKey.mail + clientId) as! String
-        let photo = aDecoder.decodeObjectForKey(PropertyKey.photo + clientId) as? UIImage
-        let group = aDecoder.decodeObjectForKey(PropertyKey.group + clientId) as! String
-        let latitude = aDecoder.decodeObjectForKey(PropertyKey.latitude + clientId) as? CLLocationDegrees
-        let longitude = aDecoder.decodeObjectForKey(PropertyKey.longitude + clientId) as? CLLocationDegrees
+        //let clientId =  GIDSignIn.sharedInstance().currentUser?.authentication.clientID ?? ""
+        let firstName = aDecoder.decodeObjectForKey(PropertyKey.firstName) as! String
+        let secondName = aDecoder.decodeObjectForKey(PropertyKey.secondName) as! String
+        let number = aDecoder.decodeObjectForKey(PropertyKey.number) as! String
+        let mail = aDecoder.decodeObjectForKey(PropertyKey.mail) as! String
+        let photo = aDecoder.decodeObjectForKey(PropertyKey.photo) as? UIImage
+        let group = aDecoder.decodeObjectForKey(PropertyKey.group) as! String
+        let latitude = aDecoder.decodeObjectForKey(PropertyKey.latitude) as? CLLocationDegrees
+        let longitude = aDecoder.decodeObjectForKey(PropertyKey.longitude) as? CLLocationDegrees
         var location:MKPointAnnotation? = nil
         if latitude != nil && longitude != nil {
             location = MKPointAnnotation()

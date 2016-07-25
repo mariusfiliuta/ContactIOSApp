@@ -49,6 +49,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // Search Controller
         searchBar.delegate = self
+        self.definesPresentationContext = true
 
     }
     override func didReceiveMemoryWarning() {
@@ -103,7 +104,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             if userContactRoute != nil{
                 mapView.removeOverlay(userContactRoute.polyline)
             }
-            getDirections()
+            if userAnnotation != nil{
+                getDirections()
+            }
             saveButton.enabled = true
         }
     }
@@ -217,8 +220,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     // Search Controller & Search Bar Delegate
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        dismissViewControllerAnimated(true, completion: nil)
-        
         localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
         localSearch = MKLocalSearch(request: localSearchRequest)
@@ -236,7 +237,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             if self.userContactRoute != nil{
                 self.mapView.removeOverlay(self.userContactRoute.polyline)
             }
-            self.getDirections()
+            if self.userAnnotation != nil{
+                self.getDirections()
+            }
             self.saveButton.enabled = true
         
         }
